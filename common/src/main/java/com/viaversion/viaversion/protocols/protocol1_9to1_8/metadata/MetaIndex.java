@@ -18,6 +18,7 @@
 package com.viaversion.viaversion.protocols.protocol1_9to1_8.metadata;
 
 import com.viaversion.viaversion.api.minecraft.entities.EntityType;
+import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_8;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_8;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_9;
 import com.viaversion.viaversion.util.Pair;
@@ -25,152 +26,187 @@ import java.util.HashMap;
 import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_10.EntityType.*;
+import static com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_8.EntityType.*;
 
+// TODO, null fields need mappings
+// TODO namings, i have no idea how to get good namings for this shit, but we need it at some point
+// TODO, exception handling, check how 1.8 <-> 1.9 handles invalid/missing metadata, maybe we need defaults??
+// TODO, entities are removing previous added metadata!!
+//       FIREBALL != ENTITY
+//       THROWABLE != ENTITY
+//       FALLING_BLOCK != ENTITY
+//       TNT_PRIMED != ENTITY
+//       ENDER_EYE != ENTITY
+//       ENTITY_HANGING != ENTITY
 public enum MetaIndex {
 
-    // entity
+    // Entity
     ENTITY_STATUS(ENTITY, 0, MetaType1_8.Byte, MetaType1_9.Byte),
     ENTITY_AIR(ENTITY, 1, MetaType1_8.Short, MetaType1_9.VarInt),
-    ENTITY_NAMETAG(ENTITY, 2, MetaType1_8.String, MetaType1_9.String), // in the entity class @ spigot 1.8.8, blame wiki.vg
-    ENTITY_ALWAYS_SHOW_NAMETAG(ENTITY, 3, MetaType1_8.Byte, MetaType1_9.Boolean), // in the entity class @ Spigot 1.8.8, blame wiki.vg
+    ENTITY_ALWAYS_SHOW_NAMETAG(ENTITY, 3, MetaType1_8.Byte, MetaType1_9.Boolean),
+    ENTITY_NAMETAG(ENTITY, 2, MetaType1_8.String, MetaType1_9.String),
     ENTITY_SILENT(ENTITY, 4, MetaType1_8.Byte, MetaType1_9.Boolean),
-    // living entity
-    LIVINGENTITY_HEALTH(ENTITY_LIVING, 6, MetaType1_8.Float, MetaType1_9.Float),
-    LIVINGENTITY_POTION_EFFECT_COLOR(ENTITY_LIVING, 7, MetaType1_8.Int, MetaType1_9.VarInt),
-    LIVINGENTITY_IS_POTION_AMBIENT(ENTITY_LIVING, 8, MetaType1_8.Byte, MetaType1_9.Boolean),
-    LIVINGENTITY_NUMBER_OF_ARROWS_IN(ENTITY_LIVING, 9, MetaType1_8.Byte, MetaType1_9.VarInt),
-    LIVINGENTITY_NO_AI(ENTITY_LIVING, 15, MetaType1_8.Byte, 10, MetaType1_9.Byte), // in 1.9 this is combined with Left handed, oh.
-    // ageable
-    AGEABLE_AGE(ENTITY_AGEABLE, 12, MetaType1_8.Byte, 11, MetaType1_9.Boolean),
-    // armour stand
-    STAND_INFO(ARMOR_STAND, 10, MetaType1_8.Byte, MetaType1_9.Byte),
-    STAND_HEAD_POS(ARMOR_STAND, 11, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    STAND_BODY_POS(ARMOR_STAND, 12, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    STAND_LA_POS(ARMOR_STAND, 13, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    STAND_RA_POS(ARMOR_STAND, 14, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    STAND_LL_POS(ARMOR_STAND, 15, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    STAND_RL_POS(ARMOR_STAND, 16, MetaType1_8.Rotation, MetaType1_9.Vector3F),
-    // human, discountined?
-    PLAYER_SKIN_FLAGS(ENTITY_HUMAN, 10, MetaType1_8.Byte, 12, MetaType1_9.Byte), // unsigned on 1.8
-    PLAYER_HUMAN_BYTE(ENTITY_HUMAN, 16, MetaType1_8.Byte, null), // unused on 1.8
-    PLAYER_ADDITIONAL_HEARTS(ENTITY_HUMAN, 17, MetaType1_8.Float, 10, MetaType1_9.Float),
-    PLAYER_SCORE(ENTITY_HUMAN, 18, MetaType1_8.Int, 11, MetaType1_9.VarInt),
-    PLAYER_HAND(ENTITY_HUMAN, -1, MetaType1_8.NonExistent, 5, MetaType1_9.Byte), // new in 1.9
-    SOMETHING_ANTICHEAT_PLUGINS_FOR_SOME_REASON_USE(ENTITY_HUMAN, 11, MetaType1_8.Byte, null), //For what we know, This doesn't exists. If you think it exists and knows what it does. Please tell us.
-    // horse
-    HORSE_INFO(HORSE, 16, MetaType1_8.Int, 12, MetaType1_9.Byte),
-    HORSE_TYPE(HORSE, 19, MetaType1_8.Byte, 13, MetaType1_9.VarInt),
-    HORSE_SUBTYPE(HORSE, 20, MetaType1_8.Int, 14, MetaType1_9.VarInt),
-    HORSE_OWNER(HORSE, 21, MetaType1_8.String, 15, MetaType1_9.OptUUID),
-    HORSE_ARMOR(HORSE, 22, MetaType1_8.Int, 16, MetaType1_9.VarInt),
-    // bat
-    BAT_ISHANGING(BAT, 16, MetaType1_8.Byte, 11, MetaType1_9.Byte),
-    // tameable
-    TAMING_INFO(ENTITY_TAMEABLE_ANIMAL, 16, MetaType1_8.Byte, 12, MetaType1_9.Byte),
-    TAMING_OWNER(ENTITY_TAMEABLE_ANIMAL, 17, MetaType1_8.String, 13, MetaType1_9.OptUUID),
-    // ocelot
-    OCELOT_TYPE(OCELOT, 18, MetaType1_8.Byte, 14, MetaType1_9.VarInt),
-    // wolf
-    WOLF_HEALTH(WOLF, 18, MetaType1_8.Float, 14, MetaType1_9.Float),
-    WOLF_BEGGING(WOLF, 19, MetaType1_8.Byte, 15, MetaType1_9.Boolean),
-    WOLF_COLLAR(WOLF, 20, MetaType1_8.Byte, 16, MetaType1_9.VarInt),
-    // pig
-    PIG_SADDLE(PIG, 16, MetaType1_8.Byte, 12, MetaType1_9.Boolean),
-    // rabbit
-    RABBIT_TYPE(RABBIT, 18, MetaType1_8.Byte, 12, MetaType1_9.VarInt),
-    // sheep
-    SHEEP_COLOR(SHEEP, 16, MetaType1_8.Byte, 12, MetaType1_9.Byte),
-    // villager
-    VILLAGER_PROFESSION(VILLAGER, 16, MetaType1_8.Int, 12, MetaType1_9.VarInt),
-    // enderman
-    ENDERMAN_BLOCKSTATE(ENDERMAN, 16, MetaType1_8.Short, 11, MetaType1_9.BlockID),
-    ENDERMAN_BLOCKDATA(ENDERMAN, 17, MetaType1_8.Byte, null), //always 0 when sent, never read by the client
-    ENDERMAN_ISSCREAMING(ENDERMAN, 18, MetaType1_8.Byte, 12, MetaType1_9.Boolean),
-    // zombie
-    ZOMBIE_ISCHILD(ZOMBIE, 12, MetaType1_8.Byte, 11, MetaType1_9.Boolean),
-    ZOMBIE_ISVILLAGER(ZOMBIE, 13, MetaType1_8.Byte, 12, MetaType1_9.VarInt),
-    ZOMBIE_ISCONVERTING(ZOMBIE, 14, MetaType1_8.Byte, 13, MetaType1_9.Boolean),
-    // ZOMBIE_RISINGHANDS added in 1.9
-    // blaze
-    BLAZE_ONFIRE(BLAZE, 16, MetaType1_8.Byte, 11, MetaType1_9.Byte),
-    // spider
-    SPIDER_CIMBING(SPIDER, 16, MetaType1_8.Byte, 11, MetaType1_9.Byte),
-    // creeper
-    CREEPER_FUSE(CREEPER, 16, MetaType1_8.Byte, 11, MetaType1_9.VarInt), // -1 idle, 1 is fuse
-    CREEPER_ISPOWERED(CREEPER, 17, MetaType1_8.Byte, 12, MetaType1_9.Boolean),
-    CREEPER_ISIGNITED(CREEPER, 18, MetaType1_8.Byte, 13, MetaType1_9.Boolean),
-    // ghast
-    GHAST_ISATTACKING(GHAST, 16, MetaType1_8.Byte, 11, MetaType1_9.Boolean),
-    // slime
-    SLIME_SIZE(SLIME, 16, MetaType1_8.Byte, 11, MetaType1_9.VarInt),
-    // skeleton
-    SKELETON_TYPE(SKELETON, 13, MetaType1_8.Byte, 11, MetaType1_9.VarInt),
-    // witch
-    WITCH_AGGRO(WITCH, 21, MetaType1_8.Byte, 11, MetaType1_9.Boolean),
-    // iron golem
-    IRON_PLAYERMADE(IRON_GOLEM, 16, MetaType1_8.Byte, 11, MetaType1_9.Byte),
-    // wither
-    WITHER_TARGET1(WITHER, 17, MetaType1_8.Int, 11, MetaType1_9.VarInt),
-    WITHER_TARGET2(WITHER, 18, MetaType1_8.Int, 12, MetaType1_9.VarInt),
-    WITHER_TARGET3(WITHER, 19, MetaType1_8.Int, 13, MetaType1_9.VarInt),
-    WITHER_INVULN_TIME(WITHER, 20, MetaType1_8.Int, 14, MetaType1_9.VarInt),
-    WITHER_PROPERTIES(WITHER, 10, MetaType1_8.Byte, null), // Thanks to plugins sending bad metadata
-    WITHER_UNKNOWN(WITHER, 11, MetaType1_8.NonExistent, null), // Thanks to plugins sending bad metadata
-    // wither skull
-    WITHERSKULL_INVULN(WITHER_SKULL, 10, MetaType1_8.Byte, 5, MetaType1_9.Boolean),
-    // guardian
-    GUARDIAN_INFO(GUARDIAN, 16, MetaType1_8.Int, 11, MetaType1_9.Byte),
-    GUARDIAN_TARGET(GUARDIAN, 17, MetaType1_8.Int, 12, MetaType1_9.VarInt),
-    // boat
-    BOAT_SINCEHIT(BOAT, 17, MetaType1_8.Int, 5, MetaType1_9.VarInt),
-    BOAT_FORWARDDIR(BOAT, 18, MetaType1_8.Int, 6, MetaType1_9.VarInt),
-    BOAT_DMGTAKEN(BOAT, 19, MetaType1_8.Float, 7, MetaType1_9.Float),
-    // BOAT_TYPE in 1.9
-    // minecart
-    MINECART_SHAKINGPOWER(MINECART_ABSTRACT, 17, MetaType1_8.Int, 5, MetaType1_9.VarInt),
-    MINECART_SHAKINGDIRECTION(MINECART_ABSTRACT, 18, MetaType1_8.Int, 6, MetaType1_9.VarInt),
-    MINECART_DAMAGETAKEN(MINECART_ABSTRACT, 19, MetaType1_8.Float, 7, MetaType1_9.Float), // also shaking modifier :P
-    MINECART_BLOCK(MINECART_ABSTRACT, 20, MetaType1_8.Int, 8, MetaType1_9.VarInt),
-    MINECART_BLOCK_Y(MINECART_ABSTRACT, 21, MetaType1_8.Int, 9, MetaType1_9.VarInt),
-    MINECART_SHOWBLOCK(MINECART_ABSTRACT, 22, MetaType1_8.Byte, 10, MetaType1_9.Boolean),
-    // Command minecart (they are still broken)
-    MINECART_COMMANDBLOCK_COMMAND(MINECART_ABSTRACT, 23, MetaType1_8.String, 11, MetaType1_9.String),
-    MINECART_COMMANDBLOCK_OUTPUT(MINECART_ABSTRACT, 24, MetaType1_8.String, 12, MetaType1_9.Chat),
-    // furnace cart
-    FURNACECART_ISPOWERED(MINECART_ABSTRACT, 16, MetaType1_8.Byte, 11, MetaType1_9.Boolean),
-    // item drop
-    ITEM_ITEM(DROPPED_ITEM, 10, MetaType1_8.Slot, 5, MetaType1_9.Slot),
-    // arrow
-    ARROW_ISCRIT(ARROW, 16, MetaType1_8.Byte, 5, MetaType1_9.Byte),
-    // firework
-    FIREWORK_INFO(FIREWORK, 8, MetaType1_8.Slot, 5, MetaType1_9.Slot),
-    // item frame
-    ITEMFRAME_ITEM(ITEM_FRAME, 8, MetaType1_8.Slot, 5, MetaType1_9.Slot),
-    ITEMFRAME_ROTATION(ITEM_FRAME, 9, MetaType1_8.Byte, 6, MetaType1_9.VarInt),
-    // ender crystal
-    ENDERCRYSTAL_HEALTH(ENDER_CRYSTAL, 8, MetaType1_8.Int, null),
-    // Ender dragon boss bar issues
-    ENDERDRAGON_UNKNOWN(ENDER_DRAGON, 5, MetaType1_8.Byte, null),
-    ENDERDRAGON_NAME(ENDER_DRAGON, 10, MetaType1_8.String, null),
-    // Normal Ender dragon
-    ENDERDRAGON_FLAG(ENDER_DRAGON, 15, MetaType1_8.Byte, null),
-    ENDERDRAGON_PHASE(ENDER_DRAGON, 11, MetaType1_8.Byte, MetaType1_9.VarInt);
 
-    private static final HashMap<Pair<EntityTypes1_10.EntityType, Integer>, MetaIndex> metadataRewrites = new HashMap<>();
+    // Entity living base
+    ENTITY_LIVING_BASE_POTION_EFFECT_COLOR(ENTITY_LIVING_BASE, 7, MetaType1_8.Int, null),
+    ENTITY_LIVING_BASE_IS_POTION_AMBIENT(ENTITY_LIVING_BASE, 8, MetaType1_8.Byte, null),
+    ENTITY_LIVING_BASE_NUMBER_OF_ARROWS_IN(ENTITY_LIVING_BASE, 9, MetaType1_8.Byte, null),
+    ENTITY_LIVING_BASE_HEALTH(ENTITY_LIVING_BASE, 6, MetaType1_8.Float, null),
+
+    // Entity living
+    ENTITY_LIVING_NO_AI(ENTITY_LIVING, 15, MetaType1_8.Byte, null), // todo, new index
+
+    // Entity ageable
+    ENTITY_AGEABLE_AGE(ENTITY_AGEABLE, 12, MetaType1_8.Byte, null), // todo, new index
+
+    // Horse
+    HORSE_INFO(HORSE, 16, MetaType1_8.Int, null), // todo, new index
+    HORSE_TYPE(HORSE, 19, MetaType1_8.Byte, null),
+    HORSE_SUBTYPE(HORSE, 20, MetaType1_8.Int, null),
+    HORSE_OWNER(HORSE, 21, MetaType1_8.String, null),
+    HORSE_ARMOR(HORSE, 22, MetaType1_8.Int, null),
+
+    // Rabbit
+    RABBIT_TYPE(RABBIT, 18, MetaType1_8.Byte, null), // todo, new index
+
+    // Entity tameable
+    TAMING_INFO(ENTITY_TAMEABLE, 16, MetaType1_8.Byte, null), // todo, new index
+    TAMING_OWNER(ENTITY_TAMEABLE, 17, MetaType1_8.String, null),
+
+    // Wolf
+    WOLF_HEALTH(WOLF, 18, MetaType1_8.Float, null), // todo, new index
+    WOLF_BEGGING(WOLF, 19, MetaType1_8.Byte, null),
+    WOLF_COLLAR(WOLF, 20, MetaType1_8.Byte, null),
+
+    // Ocelot
+    OCELOT_TYPE(OCELOT, 18, MetaType1_8.Byte, null), // todo, new index
+
+    // Pig
+    PIG_SADDLE(PIG, 16, MetaType1_8.Byte, null), // todo, new index
+
+    // TODO: new index mappings, can we have anything in that enum?
+
+    // Sheep
+    SHEEP_COLOR(SHEEP, 16, MetaType1_8.Byte, null),
+
+    // Villager
+    VILLAGER_PROFESSION(VILLAGER, 16, MetaType1_8.Int, null),
+
+    // Guardian
+    GUARDIAN_INFO(GUARDIAN, 16, MetaType1_8.Int, null),
+    GUARDIAN_TARGET(GUARDIAN, 17, MetaType1_8.Int, null),
+
+    // Zombie
+    ZOMBIE_IS_CHILD(ZOMBIE, 12, MetaType1_8.Byte, null),
+    ZOMBIE_IS_VILLAGER(ZOMBIE, 13, MetaType1_8.Byte, null),
+    ZOMBIE_IS_CONVERTING(ZOMBIE, 14, MetaType1_8.Byte, null),
+
+    // Enderman
+    ENDERMAN_BLOCKSTATE(ENDERMAN, 16, MetaType1_8.Short, null),
+    ENDERMAN_BLOCKDATA(ENDERMAN, 17, MetaType1_8.Byte, null), // todo special check this
+    ENDERMAN_IS_SCREAMING(ENDERMAN, 18, MetaType1_8.Byte, null),
+
+    // Spider
+    SPIDER_CIMBING(SPIDER, 16, MetaType1_8.Byte, null),
+
+    // Creeper
+    CREEPER_FUSE(CREEPER, 16, MetaType1_8.Byte, null),
+    CREEPER_IS_POWERED(CREEPER, 17, MetaType1_8.Byte, null),
+    CREEPER_IS_IGNITED(CREEPER, 18, MetaType1_8.Byte, null),
+
+    // Skeleton
+    SKELETON_TYPE(SKELETON, 13, MetaType1_8.Byte, null),
+
+    // Witch
+    WITCH_AGGRO(WITCH, 21, MetaType1_8.Byte, null),
+
+    // Blaze
+    BLAZE_ON_FIRE(BLAZE, 16, MetaType1_8.Byte, null),
+
+    // Wither
+    WITHER_TARGET1(WITHER, 17, MetaType1_8.Int, null),
+    WITHER_TARGET2(WITHER, 18, MetaType1_8.Int, null),
+    WITHER_TARGET3(WITHER, 19, MetaType1_8.Int, null),
+    WITHER_INVULN_TIME(WITHER, 20, MetaType1_8.Int, null),
+
+    // Iron golem
+    IRON_PLAYER_MADE(IRON_GOLEM, 16, MetaType1_8.Byte, null),
+
+    // Slime
+    SLIME_SIZE(SLIME, 16, MetaType1_8.Byte, null),
+
+    // Bat
+    BAT_IS_HANGING(BAT, 16, MetaType1_8.Byte, null),
+
+    // Ghast
+    GHAST_IS_ATTACKING(GHAST, 16, MetaType1_8.Byte, null),
+
+    // Armor Stand
+    ARMOR_STAND_INFO(ARMOR_STAND, 10, MetaType1_8.Byte, null),
+    ARMOR_STAND_HEAD_POS(ARMOR_STAND, 11, MetaType1_8.Rotation, null),
+    ARMOR_STAND_BODY_POS(ARMOR_STAND, 12, MetaType1_8.Rotation, null),
+    ARMOR_STAND_LEFT_ARM_POS(ARMOR_STAND, 13, MetaType1_8.Rotation, null),
+    ARMOR_STAND_RIGHT_ARM_POS(ARMOR_STAND, 14, MetaType1_8.Rotation, null),
+    ARMOR_STAND_LEFT_LEG_POS(ARMOR_STAND, 15, MetaType1_8.Rotation, null),
+    ARMOR_STAND_RIGHT_LEG_POS(ARMOR_STAND, 16, MetaType1_8.Rotation, null),
+
+    // Player
+    ENTITY_PLAYER_HUMAN_BYTE(ENTITY_PLAYER, 16, MetaType1_8.Byte, null),
+    ENTITY_PLAYER_ADDITIONAL_HEARTS(ENTITY_PLAYER, 17, MetaType1_8.Float, null),
+    ENTITY_PLAYER_SCORE(ENTITY_PLAYER, 18, MetaType1_8.Int, null),
+    ENTITY_PLAYER_SKIN_FLAGS(ENTITY_PLAYER, 10, MetaType1_8.Byte, null),
+
+    // Wither skull
+    WITHER_SKULL_INVULN(WITHER_SKULL, 10, MetaType1_8.Byte, null),
+
+    // Arrow
+    ARROW_IS_CRIT(ARROW, 16, MetaType1_8.Byte, null),
+
+    // Ender crystal
+    ENDER_CRYSTAL_HEALTH(ENDER_CRYSTAL, 8, MetaType1_8.Int, null), // null is correct here, throw away data....
+
+    // Firework
+    FIREWORK_ROCKET_INFO(FIREWORK_ROCKET, 8, MetaType1_8.Slot, null), // TODO, what does addByType?
+
+    // Boat
+    BOAT_SINCE_HIT(BOAT, 17, MetaType1_8.Int, null),
+    BOAT_FORWARD_DIRECTION(BOAT, 18, MetaType1_8.Int, null),
+    BOAT_DAMAGE_TAKEN(BOAT, 19, MetaType1_8.Float, null),
+
+    // Dropped item
+    ITEM_ITEM(ITEM, 10, MetaType1_8.Slot, null), // TODO, what does addByType?
+
+    // Minecarts
+    MINECART_ABSTRACT_SHAKING_POWER(MINECART_ABSTRACT, 17, MetaType1_8.Int, null),
+    MINECART_ABSTRACT_SHAKING_DIRECTION(MINECART_ABSTRACT, 18, MetaType1_8.Int, null),
+    MINECART_ABSTRACT_DAMAGE_TAKEN(MINECART_ABSTRACT, 19, MetaType1_8.Float, null),
+    MINECART_ABSTRACT_BLOCK(MINECART_ABSTRACT, 20, MetaType1_8.Int, null),
+    MINECART_ABSTRACT_BLOCK_Y(MINECART_ABSTRACT, 21, MetaType1_8.Int, null),
+    MINECART_ABSTRACT_SHOW_BLOCK(MINECART_ABSTRACT, 22, MetaType1_8.Byte, null),
+
+    MINECART_COMMAND_BLOCK_COMMAND(MINECART_COMMAND_BLOCK, 23, MetaType1_8.String, null),
+    MINECART_COMMAND_BLOCK_COMMAND_OUTPUT(MINECART_COMMAND_BLOCK, 24, MetaType1_8.String, null),
+
+    MINECART_FURNACE_IS_POWERED(MINECART_FURNACE, 16, MetaType1_8.Byte, null),
+
+    // Item frame
+    ITEM_FRAME_ITEM(ITEM_FRAME, 8, MetaType1_8.Slot, null), // TODO, what does addByType?
+    ITEM_FRAME_ROTATION(ITEM_FRAME, 9, MetaType1_8.Byte, null);
+
+    private static final HashMap<Pair<EntityTypes1_8.EntityType, Integer>, MetaIndex> metadataRewrites = new HashMap<>();
 
     static {
         for (MetaIndex index : MetaIndex.values())
             metadataRewrites.put(new Pair<>(index.clazz, index.index), index);
     }
 
-    private final EntityTypes1_10.EntityType clazz;
+    private final EntityTypes1_8.EntityType clazz;
     private final int newIndex;
     private final MetaType1_9 newType;
     private final MetaType1_8 oldType;
     private final int index;
 
-    MetaIndex(EntityTypes1_10.EntityType type, int index, MetaType1_8 oldType, @Nullable MetaType1_9 newType) {
+    MetaIndex(EntityTypes1_8.EntityType type, int index, MetaType1_8 oldType, @Nullable MetaType1_9 newType) {
         this.clazz = type;
         this.index = index;
         this.newIndex = index;
@@ -178,7 +214,7 @@ public enum MetaIndex {
         this.newType = newType;
     }
 
-    MetaIndex(EntityTypes1_10.EntityType type, int index, MetaType1_8 oldType, int newIndex, @Nullable MetaType1_9 newType) {
+    MetaIndex(EntityTypes1_8.EntityType type, int index, MetaType1_8 oldType, int newIndex, @Nullable MetaType1_9 newType) {
         this.clazz = type;
         this.index = index;
         this.oldType = oldType;
@@ -186,7 +222,7 @@ public enum MetaIndex {
         this.newType = newType;
     }
 
-    public EntityTypes1_10.EntityType getClazz() {
+    public EntityTypes1_8.EntityType getClazz() {
         return clazz;
     }
 

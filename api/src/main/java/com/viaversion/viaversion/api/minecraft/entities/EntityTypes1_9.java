@@ -123,8 +123,8 @@ public class EntityTypes1_9 {
 
         ENDER_DRAGON(63, ENTITY_LIVING),
 
-        SLIIME(55, ENTITY_LIVING),
-        MAGMA_CUBE(62, SLIIME),
+        SLIME(55, ENTITY_LIVING),
+        MAGMA_CUBE(62, SLIME),
 
         ENTITY_WATER_MOB(-1, ENTITY_LIVING),
         SQUID(94, ENTITY_WATER_MOB),
@@ -137,8 +137,8 @@ public class EntityTypes1_9 {
 
         ARMOR_STAND(30, ENTITY_LIVING_BASE),
 
-        ENTITY_HUMAN(-1, ENTITY_LIVING_BASE),
-        PLAYER(-1, ENTITY_HUMAN),
+        ENTITY_PLAYER(-1, ENTITY_LIVING_BASE),
+        PLAYER(-1, ENTITY_PLAYER),
 
         FIREBALL(-1, ENTITY),
         LARGE_FIREBALL(12, FIREBALL),
@@ -217,7 +217,6 @@ public class EntityTypes1_9 {
     }
 
     public enum ObjectType implements com.viaversion.viaversion.api.minecraft.entities.ObjectType {
-         // TODO Check minecart entities
         MINECART_RIDEABLE(10, 0, EntityType.MINECART_EMPTY),
         MINECART_CHEST(10, 1, EntityType.MINECART_CHEST),
         MINECRAFT_FURNACE(10, 2, EntityType.MINECART_FURNACE),
