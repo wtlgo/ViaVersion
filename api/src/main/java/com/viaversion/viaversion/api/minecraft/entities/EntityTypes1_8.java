@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-// 1.8 Entity / Object ids
 public class EntityTypes1_8 {
 
     public static EntityType getEntityType(final int id, @Nullable Integer data, boolean object) {
@@ -134,7 +133,10 @@ public class EntityTypes1_8 {
         ENTITY_FLYING(-1, ENTITY_LIVING),
         GHAST(56, ENTITY_FLYING),
 
-        ARMOR_STAND(30, ENTITY_LIVING),
+        ARMOR_STAND(30, ENTITY_LIVING_BASE),
+
+        ENTITY_HUMAN(-1, ENTITY_LIVING_BASE),
+        PLAYER(-1, ENTITY_HUMAN),
 
         FIREBALL(-1, ENTITY),
         LARGE_FIREBALL(12, FIREBALL),

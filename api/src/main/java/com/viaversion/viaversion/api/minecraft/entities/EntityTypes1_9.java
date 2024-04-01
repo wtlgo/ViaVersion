@@ -23,13 +23,13 @@
 package com.viaversion.viaversion.api.minecraft.entities;
 
 import com.viaversion.viaversion.util.Pair;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 // TODO Check object types
-public class EntityTypes1_10 {
+public class EntityTypes1_9 {
 
     public static EntityType getEntityType(final int id, @Nullable Integer data, boolean object) {
         if (object) {
@@ -89,7 +89,6 @@ public class EntityTypes1_10 {
         WOLF(95, ENTITY_TAMEABLE),
         OCELOT(98, ENTITY_TAMEABLE),
 
-        POLAR_BEAR(102, ENTITY_ANIMAL),
         PIG(90, ENTITY_ANIMAL),
         SHEEP(91, ENTITY_ANIMAL),
 

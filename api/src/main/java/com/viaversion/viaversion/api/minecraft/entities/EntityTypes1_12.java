@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-// 1.12 Entity / Object taken from https://github.com/Matsv/ViaBackwards/blob/master/core/src/main/java/nl/matsv/viabackwards/api/entities/types/EntityType1_12.java
+// TODO Check object types and fix
 public class EntityTypes1_12 {
 
     public static EntityType getTypeFromId(int typeID, boolean isObject) {

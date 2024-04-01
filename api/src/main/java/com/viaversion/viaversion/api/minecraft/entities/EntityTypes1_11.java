@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-// 1.11 Entity / Object ids
+// TODO Check object types and fix
 public class EntityTypes1_11 {
 
     public static EntityType getTypeFromId(int typeID, boolean isObject) {
