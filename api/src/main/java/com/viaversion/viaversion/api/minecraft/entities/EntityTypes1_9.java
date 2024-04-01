@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.Optional;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-// TODO Check object types
 public class EntityTypes1_9 {
 
+    // TODO abstract this code somehow? No idea how
     public static EntityType getEntityType(final int id, @Nullable Integer data, boolean object) {
         if (object) {
             return ObjectType.getObjectEntity(id, data).map(ObjectType::getType).orElse(null);
@@ -217,6 +217,7 @@ public class EntityTypes1_9 {
     }
 
     public enum ObjectType implements com.viaversion.viaversion.api.minecraft.entities.ObjectType {
+         // TODO Check minecart entities
         MINECART_RIDEABLE(10, 0, EntityType.MINECART_EMPTY),
         MINECART_CHEST(10, 1, EntityType.MINECART_CHEST),
         MINECRAFT_FURNACE(10, 2, EntityType.MINECART_FURNACE),
@@ -225,7 +226,8 @@ public class EntityTypes1_9 {
         MINECART_HOPPER(10, 5, EntityType.MINECART_HOPPER),
         MINECART_COMMAND_BLOCK(10, 6, EntityType.MINECART_COMMAND_BLOCK),
         FISHING_HOOK(90, EntityType.FISH_HOOK), // TODO, use entity tracker for this one
-        ARROW(60, EntityType.ARROW),
+        TIPPED_ARROW(60, EntityType.TIPPED_ARROW),
+        SPECTRAL_ARROW(91, EntityType.SPECTRAL_ARROW),
         SNOWBALL(61, EntityType.SNOWBALL),
         ITEM_FRAME(71, EntityType.ITEM_FRAME),
         LEASH_KNOT(77, EntityType.LEASH_KNOT),
@@ -233,8 +235,10 @@ public class EntityTypes1_9 {
         ENDER_EYE(72, EntityType.ENDER_EYE),
         FIREWORK_ROCKET(76, EntityType.FIREWORK_ROCKET),
         LARGE_FIREBALL(63, EntityType.LARGE_FIREBALL),
+        DRAGON_FIREBALL(93, EntityType.DRAGON_FIREBALL),
         SMALL_FIREBALL(64, EntityType.SMALL_FIREBALL),
         WITHER_SKULL(66, EntityType.WITHER_SKULL),
+        SHULKER_BULLET(67, EntityType.SHULKER_BULLET),
         EGG(62, EntityType.EGG),
         POTION(73, EntityType.POTION),
         EXP_BOTTLE(75, EntityType.EXP_BOTTLE),
@@ -243,7 +247,8 @@ public class EntityTypes1_9 {
         ARMOR_STAND(78, EntityType.ARMOR_STAND),
         ENDER_CRYSTAL(51, EntityType.ENDER_CRYSTAL),
         ITEM(2, EntityType.ITEM),
-        FALLING_BLOCK(70, EntityType.FALLING_BLOCK);
+        FALLING_BLOCK(70, EntityType.FALLING_BLOCK),
+        AREA_EFFECT_CLOUD(3, EntityType.AREA_EFFECT_CLOUD);
 
         private static final Map<Pair<Integer, Integer>, ObjectType> TYPES = new HashMap<>();
 

@@ -19,7 +19,6 @@ package com.viaversion.viaversion.protocols.protocol1_9to1_8.packets;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.data.entity.EntityTracker;
-import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_10;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
