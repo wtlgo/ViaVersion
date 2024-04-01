@@ -20,8 +20,8 @@ package com.viaversion.viaversion.protocols.protocol1_9to1_8.metadata;
 import com.viaversion.viaversion.api.minecraft.EulerAngle;
 import com.viaversion.viaversion.api.minecraft.Vector;
 import com.viaversion.viaversion.api.minecraft.entities.EntityType;
+import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_8;
 import com.viaversion.viaversion.api.minecraft.item.Item;
-import com.viaversion.viaversion.api.minecraft.metadata.MetaType;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_8;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
@@ -70,14 +70,15 @@ public class MetadataRewriter1_9To1_8 extends EntityRewriter<ClientboundPackets1
                     metadata.setValue(((Integer) value).byteValue());
                 }
                 // After writing the last one
-                if (metaIndex == MetaIndex.ENTITY_STATUS && type == EntityTypes1_10.EntityType.PLAYER) {
+                if (metaIndex == MetaIndex.ENTITY_STATUS && type == EntityTypes1_8.EntityType.PLAYER) {
                     byte val = 0;
                     if ((((Byte) value) & 0x10) == 0x10) { // Player eating/aiming/drinking
                         val = 1;
                     }
-                    int newIndex = MetaIndex.PLAYER_HAND.getNewIndex();
-                    MetaType metaType = MetaIndex.PLAYER_HAND.getNewType();
-                    event.createExtraMeta(new Metadata(newIndex, metaType, val));
+                    // TODO: Should we include 1.9 metadata into the index?
+//                    int newIndex = MetaIndex.PLAYER_HAND.getNewIndex();
+//                    MetaType metaType = MetaIndex.PLAYER_HAND.getNewType();
+//                    event.createExtraMeta(new Metadata(newIndex, metaType, val));
                 }
                 break;
             case OptUUID:
@@ -108,7 +109,7 @@ public class MetadataRewriter1_9To1_8 extends EntityRewriter<ClientboundPackets1
                 metadata.setValue(value);
                 break;
             case Boolean:
-                if (metaIndex == MetaIndex.AGEABLE_AGE)
+                if (metaIndex == MetaIndex.ENTITY_AGEABLE_AGE)
                     metadata.setValue((Byte) value < 0);
                 else
                     metadata.setValue((Byte) value != 0);
@@ -140,11 +141,12 @@ public class MetadataRewriter1_9To1_8 extends EntityRewriter<ClientboundPackets1
 
     @Override
     public EntityType typeFromId(int type) {
-        return EntityTypes1_10.getTypeFromId(type, false);
+        return EntityTypes1_8.getEntityType(type, null, false);
     }
 
     @Override
     public EntityType objectTypeFromId(int type) {
-        return EntityTypes1_10.getTypeFromId(type, true);
+        // TODO: Track data int properly
+        return EntityTypes1_8.getEntityType(type, 0, true);
     }
 }

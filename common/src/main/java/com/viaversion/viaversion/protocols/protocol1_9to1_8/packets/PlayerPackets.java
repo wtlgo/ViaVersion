@@ -20,6 +20,7 @@ package com.viaversion.viaversion.protocols.protocol1_9to1_8.packets;
 import com.google.gson.JsonObject;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.minecraft.ClientWorld;
+import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_8;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
@@ -173,7 +174,7 @@ public class PlayerPackets {
                 handler(wrapper -> {
                     int entityId = wrapper.get(Type.INT, 0);
                     EntityTracker1_9 tracker = wrapper.user().getEntityTracker(Protocol1_9To1_8.class);
-                    tracker.addEntity(entityId, EntityTypes1_10.EntityType.PLAYER);
+                    tracker.addEntity(entityId, EntityTypes1_8.EntityType.PLAYER);
                     tracker.setClientEntityId(entityId);
                 });
                 map(Type.UNSIGNED_BYTE); // 1 - Player Gamemode

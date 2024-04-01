@@ -43,6 +43,7 @@ public class EntityTypes1_8 {
 
         // Objects
         FISH_HOOK(-1, ENTITY),
+        LIGHTNING(-1, ENTITY),
 
         ENDER_EYE(15, ENTITY),
         ITEM(1, ENTITY),
